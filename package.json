@@ -1,0 +1,11 @@
+{
+  "name": "gamemanager",
+  "description": "GameManager app",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "4.x",
+    "socket.io":"1.4.5",
+    "mssql":"latest"
+  }
+} 

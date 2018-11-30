@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>运营管理工具</title>
+</head>
+
+<body>
+    <select id="serverbox" class="easyui-combobox" name="box" style="width:200px;">
+    <option value="192.168.31.118">内网服</option>
+    <option value="120.76.235.228">外网</option>
+    <option value="192.168.31.249">李涵锋</option>
+    </select>
+    <br>
+    </br>
+    <td>请输入要查找的角色名</td>
+    <div>
+        <input type = "text" id = "username" value="加里彼得">
+        <tr>
+        <td>
+            <input id="searchname" type='button'  value="查找" />
+        </td>
+        </tr>
+    </div>
+
+    <td>请输入要查找的角色ID</td>
+    <div>
+        <input type = "text" id = "userid" value="2332323">
+        <tr>
+        <td>
+            <input id="searchid" type='button'  value="查找" />
+        </td>
+        </tr>
+    </div>
+
+    <div id="messages"></div>
+    <td>
+    <input type = "text" id = "Actorid" value="角色ID">
+    <select id="box" class="easyui-combobox" name="box" style="width:200px;">
+    <option value="21">设置金币</option>
+    <option value="36">设置经验</option>
+    <option value="22">设置钻石</option>
+    </select>
+    <input type = "text" id = "param1" value="修改值">
+    <input id="ModifyBtn" type='button'  value="修改" />
+    </td>
+    <script src="http://192.168.31.249:8081/socket.io/socket.io.js"> </script>
+    <script type="text/javascript">
+    function $(id){return document.getElementById(id); }
+    var  messagesElement = document.getElementById('messages');
+    function AddMessage(message)
+    {
+        var newMessageElement = document.createElement('p');
+        var newMessageText = document.createTextNode(message);
+        newMessageElement.appendChild(newMessageText);
+        messagesElement.appendChild(newMessageElement);
+        // messagesElement.insertBefore(newMessageElement,lastmessageElement);
+        //lastmessageElement = newMessageElement;
+    }
+    var socket = io.connect('http://192.168.31.249:8081');
+    socket.on('queryuserrsp',function(content)
+    {
+        if(content.recordset.length == 1)
+        {
+            AddMessage('actorid:'+content.recordset[0].ActorID );
+            AddMessage('Level:'+content.recordset[0].Level );
+        }
+
+    });
+    socket.on('queryuserrsp1',function(content)
+    {
+        AddMessage(content );
+    });
+    var userText = document.getElementById("user");
+    $('searchname').onclick = function(mousedown)
+    {
+         var host = $("serverbox").value
+        socket.emit('searchPlayer', host,{ user: $('username').value });
+        return false;
+    }
+    
+    $('searchid').onclick = function(mousedown)
+    {
+        var host = document.getElementById("serverbox").value
+        socket.emit('queryPlayer', host,{ user: $('userid').value });
+        return false;
+    }
+    var ActoridText = document.getElementById("Actorid");
+    var boxtext = document.getElementById("box");
+    var param1text = document.getElementById("param1");
+   
+    //document.getElementById('ModifyBtn').onclick = function(mousedown)
+    $('ModifyBtn').onclick = function(mousedown)
+    {
+        var updataparam = {};
+        updataparam.uid = ActoridText.value;
+        updataparam.param = [{}];
+        updataparam.param[0] [boxtext.value+"_"] =param1text.value;
+        var host = document.getElementById("serverbox").value
+        socket.emit('updatePlayer', host,updataparam);
+        return false;
+    }
+    </script>
+</body>
