@@ -1,13 +1,15 @@
 
 var http    = require('http');
 var iconv = require('iconv-lite');
+var realtimestock = require('./realtime');
 
 function login(socket,user,password)
 {
-    console.log(user+password);
+    //console.log(user);
+    realtimestock.realtime(user);
     var url = "http://hq.sinajs.cn/list=sz000601";
     var url = "http://quotes.money.163.com/service/chddata.html?code=0600795&start=20181118&end=20181129&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP";
-	http.get(url, function(res) {
+	/*http.get(url, function(res) {
 	var source = "";
 	res.on('data', function(data) {
 							//source += data;
@@ -52,7 +54,21 @@ function login(socket,user,password)
         });
 }).on('error', function() {
     console.log("获取数据出现错误");
-});
+});*/
 
 }
-module.exports = login;
+var realInter;
+function realtime(socket,db,code){
+    // code = "000601";
+    realInter = setInterval(realtimestock.realtime,1000,socket,db,code);
+}
+function realtime_stop(){
+    clearInterval(realInter);
+}
+
+function history(socket){
+
+}
+module.exports.realtime = realtime;
+module.exports.history = history;
+exports.realtime_stop = realtime_stop;

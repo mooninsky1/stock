@@ -15,7 +15,7 @@
 		<div class="input">
 			<div class="log">
 				<div class="name">
-					<label>代码</label><input type="text" class="text" id="value_1" placeholder="代码" name="value_1" tabindex="1">
+					<label>用户名</label><input type="text" class="text" id="value_1" placeholder="代码" name="value_1" tabindex="1">
 				</div>
 				<div class="pwd">
 					<label>密　码</label><input type="password" class="text" id="value_2" placeholder="密码" name="value_2" tabindex="2">
@@ -31,25 +31,25 @@
     <div class="footer"></div>
 </div>
 
+<!--
 <script type="text/javascript" src="http://hq.sinajs.cn/list=sz000601" charset="gb2312"></script>
 
 <script type="text/javascript">var elements=hq_str_sz000601.split(",");
 
 document.write("current price:"+hq_str_sz000601);
- 
+-->
 </script>
 <!--
 <p>周K线查询：<br /><a href="http://image.sinajs.cn/newchart/weekly/n/sh000001.gif" rel="nofollow">http://image.sinajs.cn/newchart/weekly/n/sh000001.gif</a><br /><img alt="" src="http://image.sinajs.cn/newchart/weekly/n/sh000001.gif" /></p>
 -->
-<script src="http://192.168.31.249:8081/socket.io/socket.io.js"> </script>
+<script src="http://192.168.31.249:9081/socket.io/socket.io.js"> </script>
          <script type="text/javascript">
-            var socket = io.connect('http://192.168.31.249:8081');
+            var socket = io.connect('http://192.168.31.249:9081');
             socket.on('error',function(){
                 alert("socket err")
             });
             socket.on('loginRsp',function(content)
             {
-                alert(content)
                if(content == -1)
                {
                    alert("用户名或者密码出错")

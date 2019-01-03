@@ -17,9 +17,9 @@
 <body>
   
 <div id="tt" class="easyui-tabs" style="width:auto;height:500px;">
-    <div title="游戏账号查询" style="padding:20px;">
+    <div title="实时数据" style="padding:20px;">
 				
-				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <div class="form-group" style="padding: 10px 10px 0px;">
               <select id="serverbox0" class="form-control">
@@ -31,21 +31,25 @@
                 <input type="text" class="form-control" id="accountName" placeholder="请输入玩家账号"/>
               </div> 
               <button type="button" class="btn btn-default" id="FindByNameBtn" onclick="FindByName()" >查找</button>
+              <button type="button" class="btn btn-default" id="StopBtn" onclick="Stop()" >停止</button>
+              <button type="button" class="btn btn-default" id="AddBtn" onclick="Add()" >add</button>
+              <button type="button" class="btn btn-default" id="DelBtn" onclick="Del()" >del</button>
+              <button type="button" class="btn btn-default" id="ClearBtn" onclick="Clear()" >clear</button>
             </form> 
-				</div>
+		</div>
 				
 			<div class="row clearfix">
 		<div class="col-md-12 column">
 			<table class="table" id="myTable">
 				  <thead>
             <tr>
-              <th>账号</th>
-              <th>密码</th>
               <th>名字</th>
-              <th>UUID</th>
-              <th>等级</th>	
-              <th>金币</th>		
-              <th>钻石</th>
+              <th>代码</th>
+              <th>价格</th>
+              <th>变化</th>
+              <th>总量</th>
+              <th>当前量</th>	
+              <th>变化</th>		
               <th>星尘</th>
               <th>状态</th>
             </tr>
@@ -69,7 +73,7 @@
 	  </div>
   </div>
 
-    <div title="游戏角色名称查询" data-options="closable:true" style="overflow:auto;padding:20px;">
+    <div title="历史数据" data-options="closable:true" style="overflow:auto;padding:20px;">
       	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <div class="form-group" style="padding: 10px 10px 0px;">
@@ -90,10 +94,10 @@
 			<table class="table" id="myTablePlayer">
 				<thead>
 					<tr>
-					  <th>名字</th>
+					    <th>名字</th>
 						<th>UUID</th>
 						<th>等级</th>		
-            <th>金币</th>	
+                        <th>金币</th>	
 						<th>钻石</th>
 						<th>星尘</th>
 						<th>状态</th>
@@ -117,96 +121,17 @@
 	
     </div>
 
-    <div title="修改属性值" data-options="iconCls:'icon-reload',closable:true" style="padding:20px;">
-       <ul class="nav navbar-nav">
-            <div class="form-group" style="padding: 10px 10px 0px; display:inline;">
-                <select id="serverbox2" class="form-control" style="display:inlinek;">
-                </select>	
-                <input type = "text" class="form-control" id = "Actorid" placeholder="角色ID"  style="display:inline;" />
-                <select id="PropBox" class="form-control"  style="display:inline;" >
-                <option value="21">设置金币</option>
-                <option value="36">设置经验</option>
-                <option value="22">设置钻石</option>
-                </select>
-                <input type = "text" class="form-control" id = "param1" placeholder="修改值"  style="display:inline;" />
-                <button type="button" class="btn btn-default" id="ModifyBtn" onclick="UpdatePlayer()" >修改</button>							
-            </div>	
-          </ul>	 
-    </div>
 
-    <div title="踢人封号" data-options="iconCls:'icon-reload',closable:true" style="padding:20px;">
-       <ul class="nav navbar-nav">
-          <div class="form-group" style="padding: 10px 10px 0px; display:inline;">
-                <select id="serverbox3" class="form-control" style="display:inlinek;">
-                </select>	
-                <input type = "text" class="form-control" id = "KickActorid" placeholder="角色ID"  style="display:inline;" />
-                <input type = "text" class="form-control" id = "Kickparam1" placeholder="封号时长"  style="display:inline;" />
-                <button type="button" class="btn btn-default" id="BannedBtn" onclick="BannedPlayer()" >封号</button>
-                <button type="button" class="btn btn-default" id="KickBtn" onclick="KickPlayer()" >踢人</button>							
-          </div>	
-      </ul>	 
-    </div>
 
-    <div title="发送邮件" data-options="iconCls:'icon-reload',closable:true" style="padding:20px;">
-       <ul class="nav navbar-nav">
-          <div class="form-group" style="padding: 10px 10px 0px; display:inline;">
-              <select id="serverbox4" class="form-control" >
-              </select>	
-              <!-- input type = "text" class="form-control" id = "MailResID" placeholder="邮件资源ID"  / -->
-              <input type = "text" class="form-control" id = "MailTitle" placeholder="邮件标题少于16个汉字"  />
-              <input type = "text" class="form-control" id = "MailFrom" placeholder="邮件发送者"  />
-              <input type = "text" class="form-control" id = "MailTo" placeholder="邮件接收者"  />
-              <input type = "text" class="form-control" id = "MailContent" placeholder="邮件内容"  />
-              <textarea rows="5" cols="150">
-              邮件附件格式: [{"22_1":500},{"406_7":1}] ,其中 "22_1":500 表示人物属性钻石数量500,22代表钻石，1表示人物属性 ， "406_7":1表示金币包一个，406金币包道具，7表示物品
-              </textarea>
-              <input type = "text" class="form-control" id = "MailAttachments" placeholder="邮件附件"  />
-              <input type = "text" class="form-control" id = "MailEndTime" placeholder="邮件过期时间（单位小时）" onkeyup="value=value.replace(/[^\d]/g,'') " ng-pattern="/[^a-zA-Z]/" />
-             
-  
-              <button type="button" class="btn btn-default"  onclick="SendMail()" >发送邮件</button>							
-          </div>	
-      </ul>	 
-    </div>
 
-    <div title="数据统计" data-options="iconCls:'icon-reload',closable:true" style="padding:20px;">
-       <ul class="nav navbar-nav">
-          <div class="form-group" style="padding: 10px 10px 0px; display:inline;">
-              <select id="serverbox5" class="form-control" >
-              </select>	
-              <div>
-                <input type = "text" class="form-control" readonly id = "online" value="服务器当前在线人数："  />
-                <button type="button" class="btn btn-default"  onclick="GetOnline()" >查询</button>		
-              </div>					
-          </div>	
-      </ul>	 
-    </div>
+   
 
-     <div title="背包查询" data-options="iconCls:'icon-reload',closable:true" style="padding:20px;">
-       <ul class="nav navbar-nav">
-          <div class="form-group" style="padding: 10px 10px 0px; display:inline;">
-              <select id="serverbox6" class="form-control" >
-              </select>	
-              <div>
-                <input type = "text" class="form-control"  id = "GetBagActorID" placeholder="查询背包角色ID"  />
-                <button type="button" class="btn btn-default"  onclick="GetBag()" >查询</button>
-                <br></br>
-                <textarea  rows="5" cols="150">
-                    1_4:"资源ID"  2_4:"物品类型"  3_4:"物品名字" 5_4:"物品数量" 6_4:"物品品质" 10_4:"物品serverid"
-                </textarea>	
-                <br></br>	
-                <textarea  id = "GetBagRsp" rows="5" cols="150">
-                    背包内容: 
-                </textarea>		
-              </div>					
-          </div>	
-      </ul>	 
-    </div>
+    
 
 </div>
-	<script src="http://192.168.31.249:8081/socket.io/socket.io.js"> </script>
+	<script src="http://192.168.31.249:9081/socket.io/socket.io.js"> </script>
   <script type="text/javascript" >
-    var socket = io.connect('http://192.168.31.249:8081');
+    var socket = io.connect('http://192.168.31.249:9081');
     function $my(id){return document.getElementById(id); }
     function isJSON(str) {
             if (typeof str == 'string') {
@@ -227,11 +152,11 @@
     }
     $(document).ready(function(){
        //document.getElementById("serverbox3").options.add(new Option("abc","123"));
-       var severlist=[ {"name":"内网服","value":"192.168.31.118","area":"2","port":"8080" },
+       var severlist=[ {"name":"韶能股份","value":"192.168.31.118","area":"2","port":"8080" },
                        {"name":"外网服","value":"120.76.235.228","area":"5012","port":"8080" },
                        {"name":"李涵锋","value":"192.168.31.249","area":"5013","port":"8080" },
                        {"name":"策划测试服","value":"192.168.31.156","area":"8","port":"8085" }, ];
-       var UIlist = [ "serverbox0","serverbox1","serverbox2","serverbox3","serverbox4","serverbox5","serverbox6"];
+       var UIlist = [ "serverbox0","serverbox1"];
        for(var i=0; i<UIlist.length; i++)
        {
          ShowServerList(UIlist[i],severlist);
@@ -254,116 +179,15 @@
             
        }
     }
-    function GetBag()
-    {
-        var serverboxid = "serverbox6"
-        var x=document.getElementById(serverboxid).selectedIndex;
-	    var host = $my(serverboxid).value;
-        var port = $my(serverboxid)[x].getAttribute("port");
-        
-        var param = {};
-        param.uid = document.getElementById("GetBagActorID").value;
 
-        socket.emit('GetBag', host,port,param);
-    }
-    socket.on('GetBagRsp',function(content){
-        $my('GetBagRsp').value =JSON.stringify(content);
-    })
-    function GetOnline()
-    {
-        var serverboxid = "serverbox5"
-        var x=document.getElementById(serverboxid).selectedIndex;
-	    var host = $my(serverboxid).value;
-        var port = $my(serverboxid)[x].getAttribute("port");
-        
-        socket.emit('online', host,port);
-    }
-    socket.on('onlineRsp',function(content){
-        $my('online').value = content["count"];
-    })
-    function SendMail()
-    {
-      
-        var x=document.getElementById("serverbox4").selectedIndex;
-	    var host = $my("serverbox4").value;
-        var port = $my("serverbox4")[x].getAttribute("port");
-        
-        var param = {};
-        param.id = "1";//document.getElementById("MailResID").value;
-        param.title = document.getElementById("MailTitle").value;
-        param.from = document.getElementById("MailFrom").value;
-        param.to = document.getElementById("MailTo").value;
-        param.account = "";
-        param.channel = "";
-          
-        param.content = document.getElementById("MailContent").value;
-        param.showStart = new Date().getTime();
-        param.showEnd= new Date().getTime()+$my('MailEndTime').value*60*60*1000;
-        var arg = document.getElementById("MailAttachments").value;
-        if(arg.length == 0)
-        {
-           param.attachments =  {};
-        }
-        else
-        {
-             if(!isJSON(arg))
-            {
-                alert("邮件参数错误");
-                 return;
-             }
-            param.attachments= JSON.parse(arg);
-        }
-        alert("sendMail")
-        socket.emit('sendMail', host,port,param);
-    }
-    socket.on('sendMailRsp',function(content){
-      alert(content);
-    })
-    function BannedPlayer()
-    {
-      	var x=document.getElementById("serverbox3").selectedIndex;
-	    var host = $my("serverbox3").value;
-        var port = $my("serverbox3")[x].getAttribute("port");
-        var ActoridText = document.getElementById("KickActorid");
-        var param = {};
-        param.uid = ActoridText.value;
-        param.time = document.getElementById("Kickparam1").value;
-        param.mode = "";
-        socket.emit('BannedPlayer', host,port,param);
-    }
-    function KickPlayer()
-    {
-       	var x=document.getElementById("serverbox3").selectedIndex;
-        alert(document.getElementById("serverbox3"));
-	    var host = $my("serverbox3").value;
-        var port = $my("serverbox3")[x].getAttribute("port");
-        var ActoridText = document.getElementById("KickActorid");
-        var updataparam = {};
-        updataparam.uid = ActoridText.value;
-        socket.emit('KickPlayer', host,port,updataparam);
-    }
-    function UpdatePlayer(mousedown)
-    {
-        var ActoridText = document.getElementById("Actorid");
-        var boxtext = document.getElementById("PropBox");
-        var param1text = document.getElementById("param1");
-        var updataparam = {};
-        updataparam.uid = ActoridText.value;
-        updataparam.param = [{}];
-        updataparam.param[0] [boxtext.value+"_"] =param1text.value;
-       
-       	var x=document.getElementById("serverbox2").selectedIndex;
-        var host = $my("serverbox2").value
-        var port = $my("serverbox2")[x].getAttribute("port");
 
-        socket.emit('updatePlayer', host,port,updataparam);
-        return false;
-    }
+   
+
     function AddMessage(message)
     {
-		    $("#myTable tr:not(:first)").empty(""); 
-		    var table=document.getElementById("myTable");
-		    for(var i=0; i<message.data.length; i++)
+	//	$("#myTable tr:not(:first)").empty(""); 
+		var table=document.getElementById("myTable");
+//		for(var i=0; i<message.data.length; i++)
         {
             var row=table.insertRow(1);
             var col =0;
@@ -377,19 +201,19 @@
             var cellstar = row.insertCell(col++);
             var cellonline = row.insertCell(col++);
 
-            cellaccount.innerHTML=message.data[i]["996_1"];
-            cellpassword.innerHTML=message.data[i]["0_1"];
-            cellname.innerHTML=message.data[i]["3_1"];
-            celluuid.innerHTML=message.data[i]["2_1"];
-            celllevel.innerHTML=message.data[i]["6_1"];
-            cellgold.innerHTML=message.data[i]["21_1"];
-            celldiamond.innerHTML=message.data[i]["22_1"];
-            cellstar.innerHTML=message.data[i]["26_1"];
-            cellonline.innerHTML=message.data[i]["999_1"];
+            cellaccount.innerHTML=message.name;
+            cellpassword.innerHTML=message["stockid"];
+            cellname.innerHTML=message["price"];
+            celluuid.innerHTML=message["pricePer"];
+            celllevel.innerHTML=message["volume"];
+            cellgold.innerHTML=message["volumeNow"];
+            celldiamond.innerHTML=message["volumPer"];
+            cellstar.innerHTML=message["time"];
+           // cellonline.innerHTML=message.data[i]["999_1"];
         }
     }
   
-    socket.on('searchAccountRsp',function(content)
+    socket.on('realtimeRsp',function(content)
     {
         AddMessage(content );
     });
@@ -402,13 +226,36 @@
     })
     function FindByName (mousedown)
     {
-	    	var x=document.getElementById("serverbox0").selectedIndex;
-		    var host = $my("serverbox0").value;
+	    var x=document.getElementById("serverbox0").selectedIndex;
+		var host = $my("serverbox0").value;
         var port = $my("serverbox0")[x].getAttribute("port");
-        socket.emit('searchAccount', host,port,{ user: $my('accountName').value ,area:$my("serverbox0")[x].getAttribute("area") });
+        socket.emit('realtime', { code: $my('accountName').value ,area:$my("serverbox0")[x].getAttribute("area") });
         return false;
     }
-
+    function Stop(mousedown){
+        var x=document.getElementById("serverbox0").selectedIndex;
+		var host = $my("serverbox0").value;
+        var port = $my("serverbox0")[x].getAttribute("port");
+        socket.emit('realtime_stop', host,port,{ code: $my('accountName').value ,area:$my("serverbox0")[x].getAttribute("area") });
+        return false;
+    }
+    function Add(mousedown){
+        var x=document.getElementById("serverbox0").selectedIndex;
+		var host = $my("serverbox0").value;
+        var port = $my("serverbox0")[x].getAttribute("port");
+        socket.emit('realtime_add', { code: $my('accountName').value ,area:$my("serverbox0")[x].getAttribute("area") });
+        return false;
+    }
+    function Del(mousedown){
+        var x=document.getElementById("serverbox0").selectedIndex;
+		var host = $my("serverbox0").value;
+        var port = $my("serverbox0")[x].getAttribute("port");
+        socket.emit('realtime_del', { code: $my('accountName').value ,area:$my("serverbox0")[x].getAttribute("area") });
+        return false;
+    }
+    function Clear(mousedown){
+         $("#myTable tr:not(:first)").empty(""); 
+    }
     function AddPlayerMessage(message)
     {
         $("#myTablePlayer tr:not(:first)").empty(""); 
@@ -437,8 +284,8 @@
    
     function FindByPlayer (mousedown)
     {
-		  	var x=document.getElementById("serverbox1").selectedIndex;
-	    	var host = $my("serverbox1").value;
+		var x=document.getElementById("serverbox1").selectedIndex;
+	    var host = $my("serverbox1").value;
         var port = $my("serverbox1")[x].getAttribute("port");
         socket.emit('searchPlayer', host,port,{ user: $my('PlayerName').value ,area:$my("serverbox1")[x].getAttribute("area") });
         return false;
